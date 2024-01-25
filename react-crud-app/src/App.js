@@ -44,38 +44,40 @@ const App = () => {
     
     //state update 할 때 setter 사용
     setExpenses(newExpense)
-
     handleAlert({ type: "danger", text: "아이템이 삭제되었습니다."});
 
   }
+  const clearItems = () => {
+    setExpenses([]);
+  }
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if(charge !== "" && amount > 0){
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(charge !== "" && amount > 0){
 
-        if(edit){
-          const newExpenses = expenses.map(item=>{
-            return item.id === id ? {...item, charge, amount }: item;
-          })
+      if(edit){
+        const newExpenses = expenses.map(item=>{
+          return item.id === id ? {...item, charge, amount }: item;
+        })
 
-          setExpenses(newExpenses);
-          setEdit(false);
-          handleAlert({type: "success", text: "아이템이 수정되었습니다."});
-        }else{
-          const newExpense = {id: crypto.randomUUID(), charge, amount}
-          //원래 배열 건드리지 않고 새로운 배열 저장(따라서 push사용하지 x)
-          const newExpenses = [...expenses, newExpense];
-  
-          setExpenses(newExpenses);
-          handleAlert({ type: "success", text: "아이템이 생성되었습니다."});
-        }
-        
-        setCharge("");
-        setAmount(0);
+        setExpenses(newExpenses);
+        setEdit(false);
+        handleAlert({type: "success", text: "아이템이 수정되었습니다."});
       }else{
-        //console.error('error');
-        handleAlert({ type: "danger", text: "charge는 빈 값일 수 없으며, amount는 0보다 커야합니다."});
+        const newExpense = {id: crypto.randomUUID(), charge, amount}
+        //원래 배열 건드리지 않고 새로운 배열 저장(따라서 push사용하지 x)
+        const newExpenses = [...expenses, newExpense];
+
+        setExpenses(newExpenses);
+        handleAlert({ type: "success", text: "아이템이 생성되었습니다."});
       }
+      
+      setCharge("");
+      setAmount(0);
+    }else{
+      //console.error('error');
+      handleAlert({ type: "danger", text: "charge는 빈 값일 수 없으며, amount는 0보다 커야합니다."});
+    }
 
   }
 
@@ -98,7 +100,7 @@ const App = () => {
         </div>
         <div style={{ width: "100%", backgroundColor: "white", padding: "1rem" }}>
           { /* Expense List */}
-          <ExpenseList handleEdit={handleEdit} initialExpenses={expenses} handleDelete={handleDelete} />
+          <ExpenseList expenses={expenses} clearItems={clearItems} handleEdit={handleEdit} initialExpenses={expenses} handleDelete={handleDelete} />
         </div>
         <div style={{ display: "flex", justifyContent: "start", marginTop: "1rem "}}>
           <p style={{ fontSize: "2rem" }}> 
