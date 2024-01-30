@@ -23,7 +23,14 @@ const Row = ({title, id, fetchUrl}) => {
       <h2>{title}</h2>
       <div className='slider'>
         <div className='slider__arrow-left'>
-          <span className='arrow'>
+          <span className='arrow'
+            onClick={
+              ()=>{
+                // scrollLeft ; 요소의 콘텐츠가 왼쪽 가장자리에서 스크롤되는 픽셀 수를 가지고 오거나 설정
+                document.getElementById(id).scrollLeft -= window.innerWidth -80;
+              }
+            }
+          >
             {"<"}
           </span>
         </div>
@@ -38,7 +45,11 @@ const Row = ({title, id, fetchUrl}) => {
           ))}
         </div>
         <div className='slider__arrow-right'>
-          <span className='arrow'>
+          <span className='arrow'
+            onClick={()=>{
+              document.getElementById(id).scrollLeft += window.innerWidth -80;
+            }}
+          >
             {">"}
           </span>
         </div>
