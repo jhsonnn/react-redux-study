@@ -1,8 +1,8 @@
 import './App.css';
 import styled from 'styled-components';
-import Nav from './components/MovieModal/Nav';
-import Banner from './components/MovieModal/Banner';
-import Row from './components/MovieModal/Row';
+import Nav from './components/Nav';
+import Banner from './components/Banner';
+import Row from './components/Row';
 import requests from './api/request';
 
 function App() {

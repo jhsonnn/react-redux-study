@@ -1,8 +1,8 @@
 import './Banner.css';
 import React, { useEffect, useState } from 'react';
 
-import axios from '../../api/axios';
-import requests from '../../api/request';
+import axios from '../api/axios';
+import requests from '../api/request';
 import styled from 'styled-components';
 
 
