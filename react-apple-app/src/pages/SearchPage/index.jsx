@@ -2,14 +2,12 @@ import "./SearchPage.css";
 import axios from "../../api/axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom"
+import { useDebounce } from "../../hooks/useDebounce";
 
 const SearchPage = () => {
 
   const [searchResults, setSearchResults ]= useState([]);
   const navigate = useNavigate();
-
-  // const location = useLocation();
-  // console.log(location);
 
   const useQuery = ()=>{
     return new URLSearchParams(useLocation().search);
@@ -17,12 +15,18 @@ const SearchPage = () => {
 
   let query = useQuery();
   const searchTerm = query.get('q');
-
-  useEffect(()=>{
-    if(searchTerm){
-      fetchSearchMovie(searchTerm);
+  
+  const debouncedSearchTerm = useDebounce(query.get('q'), 500);
+  // useEffect(()=>{
+  //   if(searchTerm){
+  //     fetchSearchMovie(searchTerm);
+  //   }
+  // }, [searchTerm])
+   useEffect(()=>{
+    if(debouncedSearchTerm){
+      fetchSearchMovie(debouncedSearchTerm);
     }
-  }, [searchTerm])
+  }, [debouncedSearchTerm])
 
   const fetchSearchMovie = async (searchTerm) =>{
     try{
