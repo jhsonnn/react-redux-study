@@ -1,8 +1,10 @@
 
 import { useEffect } from "react";
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "styled-components"
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import app from "../firebase";
 
 const Nav = () => {
 
@@ -11,12 +13,28 @@ const Nav = () => {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
 
+    const {pathname} = useLocation('');
+
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
     const listener = () => {
         if(window.scrollY > 50){
             setShow("true");
         }else{
             setShow("false");
         }
+    }
+
+    const handleAuth = () =>{
+        signInWithPopup(auth, provider)
+        //팝업에서 로그인 잘 했으면
+        .then((result)=>{
+            console.log(result);
+        })
+        .catch((error)=>{
+            alert(error.message);
+        })
     }
 
 
@@ -44,15 +62,21 @@ const Nav = () => {
                 />
             </Logo>
 
-        <Input 
-            type="text"
-            className="nav__input"
-            value={searchValue}
-            onChange={handleChange}
-            placeholder="영화를 검색해주세요."
-        />
-        <Login>로그인</Login>
-
+        {pathname === "/" ? (
+                <Login
+                    onClick={handleAuth}
+                >로그인</Login>
+            ): 
+            (
+                <Input 
+                    type="text"
+                    className="nav__input"
+                    value={searchValue}
+                    onChange={handleChange}
+                    placeholder="영화를 검색해주세요."
+                />
+            )
+        }
         </NavWrapper>
     )
 }
