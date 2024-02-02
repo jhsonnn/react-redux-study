@@ -7,11 +7,14 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 import app from "../firebase";
 import path from "path";
 
+
+const initialUserData = localStorage.getItem('userData')? JSON.parse(localStorage.getItem('userData')) : {}
+
 const Nav = () => {
 
     const [show, setShow] = useState("false");
     
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState(initialUserData);
 
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
@@ -49,6 +52,8 @@ const Nav = () => {
             //로그인 하면 구글에서 유저데이터 받아옴
             //그러면 userData에는 유저데이터가 들어감
             setUserData(result.user);
+            //로컬스토리지 저장
+            localStorage.setItem('userData', JSON.stringify(result.user))
         })
         .catch((error)=>{
             alert(error.message);
@@ -60,7 +65,9 @@ const Nav = () => {
         //로그아웃 성공하면 state에 있는 userData 비워줘야함
         signOut(auth).then(()=>{
             setUserData({});
-            navigate(`/`);
+            //로그아웃할 때 로컬스토리지에 저장된 것 없애줌
+            localStorage.removeItem('userData');
+            //navigate(`/`);
         }).catch((error)=>{
             alert(error.message);
         });
