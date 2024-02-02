@@ -8,7 +8,7 @@ function App() {
   const inputRef = useRef();
 
   const handleClick = ()=>{
-    inputRef.current.focuse()
+    inputRef.current.focus()
   }
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 
 const ChildComponent = (props, ref) => {
   return (
