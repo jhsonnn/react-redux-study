@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "styled-components"
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 import app from "../firebase";
 import path from "path";
 
@@ -11,10 +11,12 @@ const Nav = () => {
 
     const [show, setShow] = useState("false");
     
+    const [userData, setUserData] = useState({});
+
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
 
-    const {pathname} = useLocation('');
+    const {pathname} = useLocation();
 
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
@@ -44,10 +46,24 @@ const Nav = () => {
         //팝업에서 로그인 잘 했으면
         .then((result)=>{
             console.log(result);
+            //로그인 하면 구글에서 유저데이터 받아옴
+            //그러면 userData에는 유저데이터가 들어감
+            setUserData(result.user);
         })
         .catch((error)=>{
             alert(error.message);
         })
+    }
+
+    //로그아웃
+    const handleLogOut = ()=>{
+        //로그아웃 성공하면 state에 있는 userData 비워줘야함
+        signOut(auth).then(()=>{
+            setUserData({});
+            navigate(`/`);
+        }).catch((error)=>{
+            alert(error.message);
+        });
     }
 
 
@@ -90,9 +106,63 @@ const Nav = () => {
                 />
             )
         }
+{/*pathname이 로그인 페이지일 때는 dropdown 아니면 null  */}
+        {pathname !== "/" ?
+            <SignOut>
+                <UserImg src={userData.photoURL} alt={userData.displayName} />
+                {/* 호버해주면 dropdown */}
+                <DropDown>
+                    <span onClick={handleLogOut}>
+                        Sign Out
+                    </span>
+                </DropDown>
+            </SignOut>
+            :
+            null
+        }
+
         </NavWrapper>
     )
 }
+
+const UserImg = styled.img`
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+`;
+
+const DropDown = styled.div`
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background: rgb(19, 19, 19);
+    border: 1px solid rgba(151,151,151,0.34);
+    border-radius: 4px;
+    box-shadow: rgb(0 0 0 /50%) 0px 0px 18px 0px;
+    padding: 10px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    width: 100px;
+    opacity: 0;
+`;
+
+const SignOut = styled.div`
+    position: relative;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+
+    &:hover{
+        ${DropDown} {
+            opacity: 1;
+            transition-duration: 1s;
+        }
+    }
+`;
+
 
 const Input = styled.input`
     position: fixed;
@@ -119,7 +189,7 @@ const Login = styled.a`
         color: #000;
         border-color: transparent;
     }
-`
+`;
 
 
 const Logo = styled.a`
@@ -133,8 +203,7 @@ const Logo = styled.a`
         display: block;
         width: 100%;
     }
-
-`
+`;
 
 const NavWrapper = styled.nav`
     position: fixed;
