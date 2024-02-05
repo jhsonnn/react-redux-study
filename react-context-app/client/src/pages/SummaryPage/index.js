@@ -11,7 +11,7 @@ const SummaryPage = () => {
           checked={checked}
           id="confirm-checkbox"
           // 클릭할 때마다 input 변경
-          onClick={(e)=> setChecked(e.target.checked)}
+          onChange={(e)=> setChecked(e.target.checked)}
         />{" "}
         <label htmlFor='confirm-checkbox'>
           주문하려는 것을 확인하셨나요?
