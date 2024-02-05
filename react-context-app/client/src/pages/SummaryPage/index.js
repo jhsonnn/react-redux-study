@@ -1,11 +1,48 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { OrderContext } from '../../context/OrderContext';
 
-const SummaryPage = () => {
+const SummaryPage = ({setStep}) => {
   const [checked, setChecked ]= useState(false);
+  const [orderDetails] = useContext(OrderContext);
+
+  const productArray = Array.from(orderDetails.products);
+  const productList = productArray.map(([key, value])=>(
+    <li key={key}>
+      {value} {key}
+    </li>
+  ))
+  //orderDetails.options가 있으면 hasOptions 
+  const hasOptions = orderDetails.options.size>0;
+  let optionDisplay = null;
+
+  if(hasOptions){
+    //key 부분만 배열로 가져옴
+    const optionsArray = Array.from(orderDetails.options.keys());
+    const optionList = optionsArray.map((key)=> <li key={key}>{key}</li>)
+    optionDisplay = (
+      <>
+      <h2>옵션: {orderDetails.totals.options}</h2>
+      <ul>{optionList}</ul>
+      </>
+    )
+  }
+
+  const handleSubmit = (event)=>{
+    event.preventDefault();
+    setStep(2);
+  }
 
   return (
     <div>
-      <form>
+      <h1>주문 확인</h1>
+      <h2>여행 상품: {orderDetails.totals.products}</h2>
+      <ul>
+        {productList}
+      </ul>
+
+      {optionDisplay}
+
+      <form onSubmit={handleSubmit}> 
         <input
           type="checkbox"
           checked={checked}
