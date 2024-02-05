@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import OrderContext, { OrderContextProvider } from './context/OrderContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
+  <React.StrictMode> 
+    {/* 콘텍스트 가져오고 App 감싸기 */}
+    <OrderContextProvider>
+      <App />
+    </OrderContextProvider>
+    
   </React.StrictMode>
 );
 
