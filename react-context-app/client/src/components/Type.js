@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import Products from './Products';
 import Options from './Options';
 import ErrorBanner from './ErrorBanner';
+// {} ; default로 export해준게 아니기 때문에
+import {OrderContext} from '../context/OrderContext';
 
 const Type = ({ orderType }) => {
 
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
+  const [orderData, updateItemCount] = useContext(OrderContext);
+  // console.log('orderData', orderData.totals)
 
   useEffect(()=>{
     loadItems(orderType);
@@ -30,6 +34,7 @@ const Type = ({ orderType }) => {
         key={item.name}
         name={item.name}
         imagePath={item.imagePath}
+        updateItemCount={(itemName, newItemCount)=>updateItemCount(itemName, newItemCount, orderType)}
       />
     )
   })
@@ -44,7 +49,7 @@ const Type = ({ orderType }) => {
     <div>
       <h2>주문 종료</h2>
       <p>하나의 가격</p>
-      <p>총 가격:</p>
+      <p>총 가격: {orderData.totals[orderType]}</p>
       <div
         style={{
             display: 'flex',
