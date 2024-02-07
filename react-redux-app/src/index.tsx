@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {applyMiddleware, createStore} from 'redux';
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
+import { thunk } from 'redux-thunk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,7 +20,7 @@ const loggerMiddleware = (store: any)=> (next: any)=> (action: any) =>{
   return next(action);
 };
 
-const middleware: any =  applyMiddleware(loggerMiddleware);
+const middleware: any =  applyMiddleware(thunk, loggerMiddleware);
 
 // 스토어 생성할 때 미들웨어 같이 등록
 const store = createStore(rootReducer, middleware);
