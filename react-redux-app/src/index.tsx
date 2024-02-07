@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {createStore} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
 
@@ -11,9 +11,19 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const store = createStore(rootReducer);
+// console.log('store.getState', store.getState())
 
-console.log('store.getState', store.getState())
+const loggerMiddleware = (store: any)=> (next: any)=> (action: any) =>{
+  console.log("store", store);
+  console.log("action", action);
+  return next(action);
+};
+
+const middleware: any =  applyMiddleware(loggerMiddleware);
+
+// 스토어 생성할 때 미들웨어 같이 등록
+const store = createStore(rootReducer, middleware);
+
 
 const render = ()=> root.render(
   <React.StrictMode>

@@ -19,7 +19,7 @@ function App({value, onIncrement, onDecrement}: Props) {
     setTodoValue(e.target.value);
   }
   
-  const addTodo = (e: React.FormEvent<HTMLFormElement>)=>{
+  const addTodo = (e: React.FormEvent<HTMLFormElement>): void=>{
     e.preventDefault();
     dispatch({ type:"ADD_TODO", text: todoValue })
     setTodoValue("");
