@@ -1,9 +1,9 @@
-import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import homeStyles from "../styles/Home.module.css";
 import { getSortedPostsData } from "@/lib/post";
+import Link from 'next/link';
+import { GetStaticProps } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 const Home = ({allPostsData}:{
@@ -29,7 +29,10 @@ const Home = ({allPostsData}:{
         <ul className={homeStyles.list}>
           {allPostsData.map(({id, title, date}) => 
             <li className={homeStyles.listItem} key={id}>
-              <a>{title}</a>
+              {/* 타이틀을 누를 때 링크로 넘어가야함 */}
+              <Link legacyBehavior href={`/posts/${id}`}>
+                <a>{title}</a>
+              </Link>
               <br />
               <small className={homeStyles.lightText}>
                 {date}
