@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import homeStyles from "../styles/Home.module.css";
-import { getSortedPostsData } from "@/lib/post";
+import { getSortedPostsData } from "../lib/post";
 import Link from 'next/link';
 import { GetStaticProps } from "next";
 
@@ -14,7 +14,7 @@ const Home = ({allPostsData}:{
   }[]
 }) => {
   return (
-    <div>
+    <div className={homeStyles.container}>
       <Head>
         <title>Jihyeong Son</title>
       </Head>
@@ -30,7 +30,7 @@ const Home = ({allPostsData}:{
           {allPostsData.map(({id, title, date}) => 
             <li className={homeStyles.listItem} key={id}>
               {/* 타이틀을 누를 때 링크로 넘어가야함 */}
-              <Link legacyBehavior href={`/posts/${id}`}>
+              <Link href={`/posts/${id}`} legacyBehavior>
                 <a>{title}</a>
               </Link>
               <br />
